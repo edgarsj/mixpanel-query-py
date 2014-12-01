@@ -742,27 +742,18 @@ class MixpanelQueryClient(object):
              'status': 'ok',
              'total': 1}
         """
-        if where.has_key("distinct_id"):
-            distinct_id = where.pop('distinct_id')
-            return self.connection.request(
-                'engage',
-                {
-                    'distinct_id': distinct_id,
-                    'where': where,
+        params = {
                     'session_id': session_id,
                     'page': page,
-                },
-                response_format=response_format
-            )
-
-        else: 
-            return self.connection.request(
+                    }
+        if type(where) == dict:
+            for key, value in where.iteritems():
+                params[key] = value
+        else:
+            params.where = where
+        return self.connection.request(
                 'engage',
-                {
-                    'where': where,
-                    'session_id': session_id,
-                    'page': page,
-                },
+                params,
                 response_format=response_format
             )
 
