@@ -750,7 +750,7 @@ class MixpanelQueryClient(object):
             for key, value in where.iteritems():
                 params[key] = value
         else:
-            params.where = where
+            params['where'] = where
         return self.connection.request(
                 'engage',
                 params,
