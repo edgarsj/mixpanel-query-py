@@ -742,15 +742,29 @@ class MixpanelQueryClient(object):
              'status': 'ok',
              'total': 1}
         """
-        return self.connection.request(
-            'engage',
-            {
-                'where': where,
-                'session_id': session_id,
-                'page': page,
-            },
-            response_format=response_format
-        )
+        if where.has_key("distinct_id"):
+            distinct_id = where.pop('distinct_id')
+            return self.connection.request(
+                'engage',
+                {
+                    'distinct_id': distinct_id,
+                    'where': where,
+                    'session_id': session_id,
+                    'page': page,
+                },
+                response_format=response_format
+            )
+
+        else: 
+            return self.connection.request(
+                'engage',
+                {
+                    'where': where,
+                    'session_id': session_id,
+                    'page': page,
+                },
+                response_format=response_format
+            )
 
     # Export methods ##################
     def get_export(self, start_date, end_date, event=None, where=None, bucket_id=None, response_format=FORMAT_JSON):
